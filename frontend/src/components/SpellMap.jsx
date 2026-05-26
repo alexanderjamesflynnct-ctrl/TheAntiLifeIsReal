@@ -9,6 +9,8 @@ import {
   Layers,
   Hash,
   FileCode,
+  Files,
+  Globe,
 } from "lucide-react";
 import {
   BarChart,
@@ -77,29 +79,43 @@ export default function SpellMap({
       {/* --- 01. CODE SCAN --- */}
       {devTab === "scan" && (
         <div className="space-y-8">
-          {/* STAT TILES */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-[#0c0c0c] border border-zinc-900 p-6 rounded-3xl shadow-xl flex items-center gap-6 group hover:border-[#ff0033]/50 transition-all">
               <div className="p-4 bg-red-950/20 rounded-2xl text-[#ff0033] group-hover:bg-[#ff0033] group-hover:text-white transition-all">
                 <Hash size={24} />
               </div>
               <div>
                 <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">
-                  Total Lines of Code
+                  Total lines
                 </p>
                 <h4 className="text-3xl font-black text-white tracking-tighter">
                   {scanData?.totalLines?.toLocaleString() || 0}
                 </h4>
               </div>
             </div>
-
+            <div className="bg-[#0c0c0c] border border-zinc-900 p-6 rounded-3xl shadow-xl flex items-center gap-6 group hover:border-[#ff0033]/50 transition-all">
+              <div className="p-4 bg-zinc-900 rounded-2xl text-zinc-500 group-hover:text-white transition-all">
+                <Files size={24} />
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">
+                  Total files
+                </p>
+                <h4 className="text-3xl font-black text-white tracking-tighter">
+                  {scanData?.stats?.reduce(
+                    (acc, curr) => acc + curr.count,
+                    0,
+                  ) || 0}
+                </h4>
+              </div>
+            </div>
             <div className="bg-[#0c0c0c] border border-zinc-900 p-6 rounded-3xl shadow-xl flex items-center gap-6 group hover:border-[#ff0033]/50 transition-all">
               <div className="p-4 bg-zinc-900 rounded-2xl text-zinc-500 group-hover:text-[#ff0033] transition-all">
                 <FileCode size={24} />
               </div>
               <div>
                 <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">
-                  Unique Filetypes
+                  Language Types
                 </p>
                 <h4 className="text-3xl font-black text-white tracking-tighter">
                   {scanData?.stats?.length || 0}
@@ -108,11 +124,10 @@ export default function SpellMap({
             </div>
           </div>
 
-          {/* GRAPHS AND LIST */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="bg-[#0c0c0c] p-8 rounded-3xl border border-zinc-900 h-96 shadow-xl">
               <h3 className="text-[10px] font-black text-zinc-600 uppercase mb-8 tracking-widest flex items-center gap-2">
-                <BarChart3 size={14} /> Lines per language
+                <BarChart3 size={14} /> LOC per language
               </h3>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={scanData?.stats || []}>
@@ -148,21 +163,34 @@ export default function SpellMap({
                 </BarChart>
               </ResponsiveContainer>
             </div>
-
             <div className="bg-[#0c0c0c] p-8 rounded-3xl border border-zinc-900 h-96 overflow-y-auto font-mono text-[10px] custom-scrollbar">
               <div className="text-zinc-500 mb-6 uppercase flex justify-between">
-                <span>Inventory Details</span>
-                <span className="text-[#ff0033] font-black">Verified</span>
+                <span>Language Inventory</span>
+                <span className="text-[#ff0033] font-black">
+                  Volume (Files)
+                </span>
               </div>
               {scanData?.stats?.map((s, i) => (
                 <div
                   key={i}
-                  className="flex justify-between border-b border-zinc-900/50 pb-2 mb-2 hover:bg-white/5 transition-colors px-1"
+                  className="flex justify-between border-b border-zinc-900/50 py-3 hover:bg-white/5 transition-colors px-1"
                 >
-                  <span className="text-zinc-400">{s.ext}</span>
-                  <span className="text-[#ff0033] font-bold">
-                    {s.lines.toLocaleString()} lines
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-white font-bold text-xs uppercase">
+                      {s.ext}
+                    </span>
+                    <span className="text-zinc-600 text-[8px] uppercase tracking-tighter">
+                      {s.lines.toLocaleString()} lines
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-end justify-center">
+                    <span className="text-[#ff0033] font-black text-sm">
+                      {s.count}
+                    </span>
+                    <span className="text-zinc-700 text-[8px] uppercase">
+                      Files
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -170,36 +198,62 @@ export default function SpellMap({
         </div>
       )}
 
-      {/* --- 02. LOGIC MAP --- */}
+      {/* --- 02. LOGIC MAP (UPDATED WITH REST TYPE) --- */}
       {devTab === "map" && (
         <div className="bg-[#0c0c0c] p-8 rounded-3xl border border-zinc-900 shadow-xl overflow-x-auto">
-          <div className="grid grid-cols-6 text-[9px] font-black uppercase text-zinc-600 mb-8 border-b border-zinc-900 pb-4 min-w-[800px] tracking-widest">
+          {/* Header Grid - Now 7 columns */}
+          <div className="grid grid-cols-7 text-[9px] font-black uppercase text-zinc-600 mb-8 border-b border-zinc-900 pb-4 min-w-[1000px] tracking-widest">
             <div>UI Trigger</div>
             <div>Controller</div>
             <div>Action</div>
+            <div>REST Type</div> {/* NEW COLUMN */}
             <div>Route</div>
             <div>SQL</div>
-            <div>Table</div>
+            <div>Target Table</div>
           </div>
-          {spellMap?.map((m, i) => (
-            <div
-              key={i}
-              className="grid grid-cols-6 text-[11px] py-5 border-b border-zinc-900 items-center min-w-[800px] hover:bg-white/5 px-2 transition-all"
-            >
-              <div className="text-zinc-500">{m.UI || m.ui}</div>
-              <div className="text-zinc-300 uppercase font-black">
-                {m.Controller || m.controller}
+
+          {spellMap?.map((m, i) => {
+            // Color logic for REST verbs
+            const verb = (m.Verb || m.verb || "GET").toUpperCase();
+            const verbColor =
+              verb === "POST"
+                ? "text-green-500"
+                : verb === "DELETE"
+                  ? "text-red-500"
+                  : "text-blue-500";
+
+            return (
+              <div
+                key={i}
+                className="grid grid-cols-7 text-[11px] py-5 border-b border-zinc-900 items-center min-w-[1000px] hover:bg-white/5 px-2 transition-all"
+              >
+                <div className="text-zinc-500 font-bold">{m.UI || m.ui}</div>
+                <div className="text-zinc-300 uppercase font-black">
+                  {m.Controller || m.controller}
+                </div>
+                <div className="text-white font-mono">
+                  {m.Action || m.action}
+                </div>
+
+                {/* REST Type Data Cell */}
+                <div
+                  className={`${verbColor} font-black flex items-center gap-2`}
+                >
+                  <Globe size={10} /> {verb}
+                </div>
+
+                <div className="text-zinc-600 font-mono text-[9px] truncate pr-4">
+                  {m.Route || m.route}
+                </div>
+                <div className="text-[#ff0033] font-black">
+                  {m.SQL || m.sql}
+                </div>
+                <div className="text-zinc-400 flex items-center gap-2">
+                  <Database size={12} /> {m.TargetTable || m.targetTable}
+                </div>
               </div>
-              <div className="text-white font-mono">{m.Action || m.action}</div>
-              <div className="text-zinc-600 font-mono text-[9px] truncate pr-4">
-                {m.Route || m.route}
-              </div>
-              <div className="text-[#ff0033] font-black">{m.SQL || m.sql}</div>
-              <div className="text-zinc-400 flex items-center gap-2">
-                <Database size={12} /> {m.TargetTable || m.targetTable}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -309,14 +363,13 @@ export default function SpellMap({
               ))}
             </div>
           </div>
-
           <div className="flex flex-col gap-6">
             <div className="bg-[#0c0c0c] p-8 rounded-3xl border border-zinc-800 flex-1 flex flex-col shadow-xl">
               <div className="flex justify-between items-center mb-4">
                 <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">
                   Payload Editor
                 </span>
-                <Terminal size={14} className="text-zinc-800" />
+                <Terminal size={14} text-zinc-800 />
               </div>
               <textarea
                 className="w-full bg-black border border-zinc-800 p-5 rounded-2xl text-green-500 font-mono text-xs flex-1 outline-none focus:border-[#ff0033] transition-all shadow-inner resize-none"
