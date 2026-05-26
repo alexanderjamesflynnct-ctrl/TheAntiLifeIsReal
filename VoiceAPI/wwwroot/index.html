@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sinister Harmony Studio</title>
+    <style>
+      :root {
+        --bg-color: #050505;
+        --panel-color: #121212;
+        --accent-color: #ff0033;
+        --text-color: #d0d0d0;
+        --border-color: #2a2a2a;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        width: 100%;
+        max-width: 700px;
+        background-color: var(--panel-color);
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        margin-bottom: 20px;
+      }
+      h1,
+      h2 {
+        color: var(--accent-color);
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        margin-top: 0;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        color: #777;
+      }
+      .val-display {
+        float: right;
+        color: var(--accent-color);
+        font-family: monospace;
+      }
+      select,
+      textarea,
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #000;
+        border: 1px solid var(--border-color);
+        color: white;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      input[type="range"] {
+        width: 100%;
+        cursor: pointer;
+        accent-color: var(--accent-color);
+      }
+      button {
+        width: 100%;
+        padding: 15px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        text-transform: uppercase;
+        margin-top: 10px;
+      }
+
+      /* History Styles */
+      .history-container {
+        width: 100%;
+        max-width: 700px;
+        background: var(--panel-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        height: 300px;
+        overflow-y: auto;
+      }
+      .history-item {
+        background: #000;
+        border: 1px solid #222;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+      }
+      .history-info {
+        flex-grow: 1;
+        margin-right: 15px;
+      }
+      .history-text {
+        font-style: italic;
+        color: #aaa;
+        display: block;
+        margin-bottom: 5px;
+      }
+      .load-btn {
+        width: auto;
+        padding: 5px 15px;
+        font-size: 0.7rem;
+        margin: 0;
+      }
+
+      .status {
+        text-align: center;
+        color: var(--accent-color);
+        display: none;
+        margin: 10px 0;
+      }
+      .result-area {
+        text-align: center;
+        display: none;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+      }
+      audio {
+        width: 100%;
+        filter: invert(1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Vocal Generator</h1>
+
+      <div class="form-group">
+        <label>Entity Voice</label>
+        <select id="voiceSelect">
+          <option>Loading...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Speech Text</label>
+        <textarea id="text" rows="2">The anti-life is real.</textarea>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
+        <div class="form-group">
+          <label
+            >Main Shift
+            <span class="val-display" id="v_shiftMain">-0.4</span></label
+          >
+          <input
+            type="range"
+            id="shiftMain"
+            min="-2.0"
+            max="0.5"
+            step="0.05"
+            value="-0.4"
+            oninput="updateVal('v_shiftMain', this.value)"
+          />
+        </div>
+        <div class="form-group">
+          <label
+            >Harmony Shift
+            <span class="val-display" id="v_shiftHarmony">-0.58</span></label
+          >
+          <input
+            type="range"
+            id="shiftHarmony"
+            min="-2.0"
+            max="0.5"
+            step="0.01"
+            value="-0.58"
+            oninput="updateVal('v_shiftHarmony', this.value)"
+          />
+        </div>
+        <div class="form-group">
+          <label
+            >Abyssal Shift
+            <span class="val-display" id="v_shiftSub">-1.0</span></label
+          >
+          <input
+            type="range"
+            id="shiftSub"
+            min="-2.0"
+            max="0.5"
+            step="0.05"
+            value="-1.0"
+            oninput="updateVal('v_shiftSub', this.value)"
+          />
+        </div>
+        <div class="form-group">
+          <label
+            >Speech Rate <span class="val-display" id="v_rate">-25</span></label
+          >
+          <input
+            type="range"
+            id="edgeRate"
+            min="-50"
+            max="50"
+            step="1"
+            value="-25"
+            oninput="updateVal('v_rate', this.value)"
+          />
+        </div>
+      </div>
+
+      <button id="genBtn" onclick="generate()">Manifest Audio</button>
+      <div id="status" class="status">Vocalizing...</div>
+
+      <div id="resultArea" class="result-area">
+        <audio id="player" controls></audio>
+      </div>
+    </div>
+
+    <h2>Vocal Vault (History)</h2>
+    <div class="history-container" id="historyList">
+      <!-- History items appear here -->
+    </div>
+
+    <script>
+      function updateVal(id, val) {
+        document.getElementById(id).innerText = val;
+      }
+
+      async function loadVoices() {
+        const resp = await fetch("/api/voice/list");
+        const voices = await resp.json();
+        const select = document.getElementById("voiceSelect");
+        select.innerHTML = "";
+        voices.forEach((v) => {
+          const opt = document.createElement("option");
+          opt.value = v;
+          opt.innerText = v;
+          if (v === "en-US-GuyNeural") opt.selected = true;
+          select.appendChild(opt);
+        });
+      }
+      async function loadHistory() {
+        try {
+          const resp = await fetch("/api/voice/history");
+          const history = await resp.json();
+          const list = document.getElementById("historyList");
+          list.innerHTML = "";
+
+          history.forEach((item) => {
+            // We use item.Text, item.Voice, etc. (PascalCase)
+            const div = document.createElement("div");
+            div.className = "history-item";
+            div.innerHTML = `
+                <div class="history-info">
+                    <span class="history-text">"${item.Text || "No Text"}"</span>
+                    <small>${item.Voice} | Rate: ${item.EdgeRate}% | Main: ${item.ShiftMain}</small>
+                </div>
+                <button class="load-btn" onclick='applyHistory(${JSON.stringify(item)})'>Load Settings</button>
+            `;
+            list.appendChild(div);
+          });
+        } catch (err) {
+          console.error("History Load Error:", err);
+        }
+      }
+
+      function applyHistory(item) {
+        // Map the PascalCase database fields back to the UI elements
+        document.getElementById("text").value = item.Text;
+        document.getElementById("voiceSelect").value = item.Voice;
+        document.getElementById("shiftMain").value = item.ShiftMain;
+        document.getElementById("shiftHarmony").value = item.ShiftHarmony;
+        document.getElementById("shiftSub").value = item.ShiftSub;
+        document.getElementById("edgeRate").value = item.EdgeRate;
+        document.getElementById("delayMs").value = item.DelayMs || 0;
+
+        // Manually trigger the value display updates
+        updateVal("v_shiftMain", item.ShiftMain);
+        updateVal("v_shiftHarmony", item.ShiftHarmony);
+        updateVal("v_shiftSub", item.ShiftSub);
+        updateVal("v_rate", item.EdgeRate);
+        if (document.getElementById("v_delay")) {
+          updateVal("v_delay", (item.DelayMs || 0) + "ms");
+        }
+
+        // Scroll to top so user can see the loaded settings
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      async function generate() {
+        const btn = document.getElementById("genBtn");
+        btn.disabled = true;
+        document.getElementById("status").style.display = "block";
+
+        const payload = {
+          text: document.getElementById("text").value,
+          voice: document.getElementById("voiceSelect").value,
+          fileNameBase: "gen",
+          edgePitch: -30,
+          edgeRate: parseInt(document.getElementById("edgeRate").value),
+          shiftMain: parseFloat(document.getElementById("shiftMain").value),
+          shiftHarmony: parseFloat(
+            document.getElementById("shiftHarmony").value,
+          ),
+          shiftSub: parseFloat(document.getElementById("shiftSub").value),
+          subGain: -12,
+          harmonyGain: -7,
+          delayMs: 0,
+          lowPass: 2500,
+        };
+
+        const resp = await fetch("/api/voice/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          document.getElementById("resultArea").style.display = "block";
+          document.getElementById("player").src = data.url;
+          document.getElementById("player").play();
+          loadHistory(); // Refresh history
+        }
+        btn.disabled = false;
+        document.getElementById("status").style.display = "none";
+      }
+
+      loadVoices();
+      loadHistory();
+    </script>
+  </body>
+</html>
