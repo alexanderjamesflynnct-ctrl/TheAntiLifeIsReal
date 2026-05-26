@@ -1,0 +1,107 @@
+# 📜 The Grand Grimoire: Installation Guide
+## Project: **Demonic Voices Studio**
+
+This document outlines the ritual required to manifest the Demonic Voices environment on a local machine. This is a full-stack application utilizing a C# ASP.NET Core API, a Python Audio Engine, and a React/Vite/Tailwind v4 Frontend.
+
+---
+
+## 1. Prerequisites (The Soul of the System)
+Ensure the following are installed on your workstation:
+
+*   **IDE:** [Visual Studio Code](https://code.visualstudio.com/)
+*   **Backend:** [.NET 10.0 SDK](https://dotnet.microsoft.com/download)
+*   **Frontend:** [Node.js (LTS)](https://nodejs.org/)
+*   **Engine:** [Python 3.12+](https://www.python.org/)
+*   **Media:** [FFmpeg](https://ffmpeg.org/download.html) (Essential for audio processing)
+    *   *Crucial:* Add the FFmpeg `bin` folder to your **Windows System PATH**.
+
+---
+
+## 2. Python Engine Setup
+The studio relies on Microsoft’s Neural Voices and Pydub for harmonic layering.
+
+1. Open a terminal and install the required libraries:
+   ```bash
+   pip install edge-tts pydub audioop-lts
+   ```
+2. Locate your Python executable path:
+   *   Type `where python` in your terminal.
+   *   Copy this path (e.g., `C:\Users\lex\AppData\Local\Python\...\python.exe`).
+   *   **Note:** You must update the `_pythonPath` variable in `VoiceController.cs` and `DeveloperController.cs` with this absolute path.
+
+---
+
+## 3. C# Backend Manifestation (`voiceapi`)
+The backend handles SQLite persistence, OS process orchestration, and codebase reflection.
+
+1. Navigate to the `voiceapi` folder.
+2. Install NuGet packages:
+   ```bash
+   dotnet add package Dapper
+   dotnet add package Microsoft.Data.Sqlite
+   dotnet add package Microsoft.CodeAnalysis.CSharp
+   dotnet add package Swashbuckle.AspNetCore
+   ```
+3. **Database Initialization:**
+   *   The system creates `voice_vault.db` automatically on first run.
+   *   If you encounter "Missing Column" errors during development, delete `voice_vault.db` and restart the API to trigger a schema sync.
+4. **Folder Structure:**
+   *   Ensure a folder exists at `voiceapi/wwwroot/audio/`. C# requires this to save generated `.wav` files.
+
+---
+
+## 4. React Frontend Setup (`frontend`)
+The UI uses Tailwind v4 and Recharts for the Developer Spell Map.
+
+1. Navigate to the `frontend` folder.
+2. Install dependencies:
+   ```bash
+   npm install
+   npm install axios lucide-react recharts framer-motion @tailwindcss/postcss
+   ```
+3. **Tailwind v4 Configuration:**
+   *   Ensure `postcss.config.js` uses `@tailwindcss/postcss`.
+   *   Ensure `src/index.css` begins with `@import "tailwindcss";`.
+
+---
+
+## 5. Execution Ritual (Running the App)
+
+### Start the Backend
+```bash
+cd voiceapi
+dotnet run
+```
+*   Verify the terminal says: `Now listening on: http://localhost:5135`
+
+### Start the Frontend
+```bash
+cd frontend
+npm run dev
+```
+*   Vite will provide a link (usually `http://localhost:5173` or `5174`).
+
+---
+
+## 6. Initializing the Grimoire
+When the app opens for the first time:
+
+1.  Navigate to the **Spell Map** tab.
+2.  Click the **REFRESH CODEBASE** button (Top Right).
+3.  This triggers the reflection engine to scan your files, calculate total lines of code, and map the API endpoints into your SQLite database.
+4.  Once the "Archive Reified" message appears, your graphs and logic maps will populate.
+
+---
+
+## 7. Troubleshooting
+
+| Symptom | Solution |
+| :--- | :--- |
+| **Silent Audio** | Ensure `crossOrigin="anonymous"` is on the `<audio>` tag in `Studio.jsx` and `app.UseStaticFiles` is configured in `Program.cs`. |
+| **CORS Errors** | Verify `Program.cs` allows `localhost` origins for the specific port Vite is using. |
+| **500 Error on Generate** | Verify FFmpeg is in your System PATH. Check `debug_log.txt` for Python traceback. |
+| **White Screen on Dev Tab** | Ensure you clicked "Refresh Codebase" to populate the database tables used by that tab. |
+| **Visualizer not moving** | The visualizer requires a user "Play" interaction before the browser allows the `AudioContext` to start. |
+
+---
+*Demonic Voices Studio v1.0 - Generated for the Architects of the Void.*
