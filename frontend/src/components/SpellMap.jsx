@@ -64,14 +64,26 @@ export default function SpellMap({
             label="04. Explorer"
           />
         </div>
-        <button
-          onClick={syncArchive}
-          disabled={loading}
-          className="flex items-center gap-2 text-[10px] font-black text-[#ff0033] bg-red-950/10 px-6 py-3 rounded-xl border border-red-900/20 hover:bg-[#ff0033] hover:text-white transition-all shadow-lg"
-        >
-          <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />{" "}
-          REFRESH CODEBASE
-        </button>
+
+        <div className="flex gap-3">
+          {/* NEW DOWNLOAD BUTTON */}
+          <a
+            href="http://localhost:5135/api/developer/grimoire"
+            download
+            className="flex items-center gap-2 text-[10px] font-black text-blue-500 bg-blue-950/10 px-6 py-3 rounded-xl border border-blue-900/20 hover:bg-blue-600 hover:text-white transition-all shadow-lg"
+          >
+            <Layers size={14} /> DOWNLOAD SPEC (.JSON)
+          </a>
+
+          <button
+            onClick={syncArchive}
+            disabled={loading}
+            className="flex items-center gap-2 text-[10px] font-black text-[#ff0033] bg-red-950/10 px-6 py-3 rounded-xl border border-red-900/20 hover:bg-[#ff0033] hover:text-white transition-all shadow-lg"
+          >
+            <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />{" "}
+            REFRESH CODEBASE
+          </button>
+        </div>
       </div>
 
       {/* 2. SUB-TAB CONTENT */}

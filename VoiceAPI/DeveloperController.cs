@@ -11,6 +11,21 @@ public class DeveloperController : ControllerBase
 {
     private readonly string _conn = "Data Source=voice_vault.db";
 
+[HttpGet("grimoire")]
+public IActionResult DownloadSwaggerJson()
+{
+    // The file was generated in the root VoiceAPI folder
+    string path = Path.Combine(Directory.GetCurrentDirectory(), "swagger.json");
+
+    if (!System.IO.File.Exists(path))
+    {
+        return NotFound("The swagger.json grimoire has not been manifested yet. Run the CLI tool.");
+    }
+
+    var bytes = System.IO.File.ReadAllBytes(path);
+    return File(bytes, "application/json", "demonic_voices_api.json");
+}
+
 [HttpPost("refresh")]
 public async Task<IActionResult> RefreshCodebase()
 {
