@@ -1213,11 +1213,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lex\\source\\Gemini_AIStudio\\AudioGeneration_Experimentation\\TheAntiLifeIsReal\\voiceapi\\VoiceAPI.csproj",
+      "projectUniqueName": "C:\\Users\\lex\\source\\Gemini_AIStudio\\AudioGeneration_Experimentation\\TheAntiLifeIsReal\\VoiceAPI\\VoiceAPI.csproj",
       "projectName": "VoiceAPI",
-      "projectPath": "C:\\Users\\lex\\source\\Gemini_AIStudio\\AudioGeneration_Experimentation\\TheAntiLifeIsReal\\voiceapi\\VoiceAPI.csproj",
+      "projectPath": "C:\\Users\\lex\\source\\Gemini_AIStudio\\AudioGeneration_Experimentation\\TheAntiLifeIsReal\\VoiceAPI\\VoiceAPI.csproj",
       "packagesPath": "C:\\Users\\lex\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lex\\source\\Gemini_AIStudio\\AudioGeneration_Experimentation\\TheAntiLifeIsReal\\voiceapi\\obj\\",
+      "outputPath": "C:\\Users\\lex\\source\\Gemini_AIStudio\\AudioGeneration_Experimentation\\TheAntiLifeIsReal\\VoiceAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
