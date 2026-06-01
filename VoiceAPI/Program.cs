@@ -1,9 +1,13 @@
+﻿using System.Text.Json;
+using Swashbuckle.AspNetCore.Swagger;
+using kuraiaepiai.Source;
+using System.Text;
+using System.IO;
 using Microsoft.Data.Sqlite;
 using Dapper;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
-// FIXED: Namespace is now flat in v3.x
-using Microsoft.OpenApi; 
+using Microsoft.OpenApi; // .NET 10 uses the flat namespace (no .Models)
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,20 +24,14 @@ builder.Services.AddCors(options => {
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// 2. ENHANCED SWAGGER GENERATION
+// 2. SWAGGER GENERATION
 builder.Services.AddSwaggerGen(options =>
 {
-    // Note: We use 'OpenApiInfo' directly from Microsoft.OpenApi
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
         Title = "Demonic Voices API",
-        Description = "A harmonic vocal synthesis engine for manifesting sinister audio.",
-        Contact = new OpenApiContact
-        {
-            Name = "Architect of the Void",
-            Email = "architect@abyss.local"
-        }
+        Description = "A harmonic vocal synthesis engine for manifesting sinister audio."
     });
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -60,7 +58,6 @@ using (var connection = new SqliteConnection(connectionString))
 // 4. MIDDLEWARE PIPELINE
 app.UseCors("AllowReact");
 
-// Enable Swagger UI
 app.UseSwagger();
 app.UseSwaggerUI(options => {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Demonic Voices API v1");
@@ -70,16 +67,44 @@ app.UseSwaggerUI(options => {
 app.UseDefaultFiles();
 app.UseStaticFiles(); 
 
+// Serve audio files from wwwroot/audio
+var audioPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "audio");
+if (!Directory.Exists(audioPath)) Directory.CreateDirectory(audioPath);
+
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "audio")),
+    FileProvider = new PhysicalFileProvider(audioPath),
     RequestPath = "/audio"
 });
 
 app.MapControllers();
 
-var audioPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "audio");
-if (!Directory.Exists(audioPath)) Directory.CreateDirectory(audioPath);
 
+// <clearapi-start>
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("KuraiaepiaiPolicy");
+    app.MapGet("/clearapi/push", async (HttpContext context) => {
+        try {
+            string jsonContent = "";
+            var swaggerProvider = context.RequestServices.GetService<ISwaggerProvider>();
+            if (swaggerProvider != null) {
+                var doc = swaggerProvider.GetSwagger("v1", null, "/");
+                doc.Servers = new List<OpenApiServer> { new OpenApiServer { Url = $"{context.Request.Scheme}://{context.Request.Host}" } };
+                using var sw = new StringWriter();
+                doc.SerializeAsV3(new OpenApiJsonWriter(sw));
+                jsonContent = sw.ToString();
+            } else {
+                using var client = new HttpClient();
+                jsonContent = await client.GetStringAsync($"{context.Request.Scheme}://{context.Request.Host}/openapi/v1.json");
+            }
+            await File.WriteAllTextAsync("swagger.json", jsonContent, Encoding.UTF8);
+            var report = await (new KuraiaepiaiReporter()).GenerateReport(Directory.GetCurrentDirectory(), jsonContent);
+            using var client2 = new HttpClient();
+            var response = await client2.PostAsJsonAsync("http://localhost:8000/api/collect", report);
+            return response.IsSuccessStatusCode ? Results.Ok("Synced!") : Results.BadRequest("Sync failed.");
+        } catch (Exception ex) { return Results.Problem(ex.Message); }
+    });
+}
+// <clearapi-end>
 app.Run();

@@ -103,3 +103,4 @@ C:\Users\lex\source\Gemini_AIStudio\AudioGeneration_Experimentation\TheAntiLifeI
 C:\Users\lex\source\Gemini_AIStudio\AudioGeneration_Experimentation\TheAntiLifeIsReal\VoiceAPI\obj\Debug\net10.0\VoiceAPI.genruntimeconfig.cache
 C:\Users\lex\source\Gemini_AIStudio\AudioGeneration_Experimentation\TheAntiLifeIsReal\VoiceAPI\obj\Debug\net10.0\ref\VoiceAPI.dll
 C:\Users\lex\source\Gemini_AIStudio\AudioGeneration_Experimentation\TheAntiLifeIsReal\VoiceAPI\bin\Debug\net10.0\swagger.json
+C:\Users\lex\source\Gemini_AIStudio\AudioGeneration_Experimentation\TheAntiLifeIsReal\voiceapi\obj\Debug\net10.0\compressed\pdugrfqm0x-{0}-hqo35ivoir-hqo35ivoir.gz

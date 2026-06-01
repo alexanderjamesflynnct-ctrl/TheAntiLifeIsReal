@@ -1,14 +1,15 @@
-{
+﻿{
   "openapi": "3.0.4",
   "info": {
     "title": "Demonic Voices API",
     "description": "A harmonic vocal synthesis engine for manifesting sinister audio.",
-    "contact": {
-      "name": "Architect of the Void",
-      "email": "architect@abyss.local"
-    },
     "version": "v1"
   },
+  "servers": [
+    {
+      "url": "http://localhost:5135"
+    }
+  ],
   "paths": {
     "/api/Developer/grimoire": {
       "get": {
@@ -147,6 +148,18 @@
           }
         }
       }
+    },
+    "/clearapi/push": {
+      "get": {
+        "tags": [
+          "VoiceAPI"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -225,6 +238,9 @@
     },
     {
       "name": "Voice"
+    },
+    {
+      "name": "VoiceAPI"
     }
   ]
 }
