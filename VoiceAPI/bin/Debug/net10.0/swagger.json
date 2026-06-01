@@ -9,6 +9,11 @@
     },
     "version": "v1"
   },
+  "servers": [
+    {
+      "url": "http://localhost:5135"
+    }
+  ],
   "paths": {
     "/api/Developer/grimoire": {
       "get": {
@@ -147,6 +152,18 @@
           }
         }
       }
+    },
+    "/clearapi/push": {
+      "get": {
+        "tags": [
+          "VoiceAPI"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -225,6 +242,9 @@
     },
     {
       "name": "Voice"
+    },
+    {
+      "name": "VoiceAPI"
     }
   ]
 }

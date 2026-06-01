@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "gXLWX5LIxSc=",
+  "dgSpecHash": "p9QUOSJqpbk=",
   "success": true,
   "projectFilePath": "C:\\Users\\lex\\source\\Gemini_AIStudio\\AudioGeneration_Experimentation\\TheAntiLifeIsReal\\voiceapi\\VoiceAPI.csproj",
   "expectedPackageFiles": [
@@ -17,10 +17,10 @@
     "C:\\Users\\lex\\.nuget\\packages\\sqlitepclraw.core\\2.1.11\\sqlitepclraw.core.2.1.11.nupkg.sha512",
     "C:\\Users\\lex\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.11\\sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
     "C:\\Users\\lex\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.11\\sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
-    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore\\10.1.7\\swashbuckle.aspnetcore.10.1.7.nupkg.sha512",
-    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\10.1.7\\swashbuckle.aspnetcore.swagger.10.1.7.nupkg.sha512",
-    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\10.1.7\\swashbuckle.aspnetcore.swaggergen.10.1.7.nupkg.sha512",
-    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.1.7\\swashbuckle.aspnetcore.swaggerui.10.1.7.nupkg.sha512"
+    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore\\10.2.0\\swashbuckle.aspnetcore.10.2.0.nupkg.sha512",
+    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\10.2.0\\swashbuckle.aspnetcore.swagger.10.2.0.nupkg.sha512",
+    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\10.2.0\\swashbuckle.aspnetcore.swaggergen.10.2.0.nupkg.sha512",
+    "C:\\Users\\lex\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.2.0\\swashbuckle.aspnetcore.swaggerui.10.2.0.nupkg.sha512"
   ],
   "logs": []
 }
